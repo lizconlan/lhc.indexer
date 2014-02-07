@@ -12,6 +12,12 @@ the Collider's only half built but, but... Reasons. Honest.
 Deliberately doesn't build the database as it assumes that the database has 
 already been created and populated by the Collider.
 
+## Erm, why is this separate?
+
+We wanted to have the option to run this from its own box, although we're 
+not necessarily going to implement it that way. So the Collider, the Indexer
+and the Search Front End are going to go into their own repos.
+
 ## Assumptions
 
 * Ruby 2.0.x
