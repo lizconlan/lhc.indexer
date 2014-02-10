@@ -1,4 +1,8 @@
 class Mappings
+  def self.index_names
+    ["commons_hansard"]
+  end
+  
   def self.all_mappings
     {
       commons_hansard:
