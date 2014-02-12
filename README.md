@@ -7,6 +7,8 @@ Search indexing thing for the
 A little rough and ready, and decidedly weird to start working on this while 
 the Collider's only half built but, but... Reasons. Honest.
 
+Also, frankly, [dogfooding](http://en.wikipedia.org/wiki/Eating_your_own_dog_food).
+
 ## Oddities
 
 Deliberately doesn't build the database as it assumes that the database has 
@@ -22,4 +24,4 @@ and the Search Front End are going to go into their own repos.
 
 * Ruby 2.0.x
 * Postgres 9.3.x
-* Elasticsearch 0.90.x
+* Elasticsearch 0.90
