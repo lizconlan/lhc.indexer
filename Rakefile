@@ -52,8 +52,10 @@ task :index_queue => :environment do
     raise "must specify the elasticsearch host e.g. rake create_indexes host=localhost"
   end
   
-  indexer = LHC::Indexer.new(host, port)
+  #ensure the indexes are created properly
+  Rake::Task["create_indexes"].execute
   
+  indexer = LHC::Indexer.new(host, port)
   section = Section.where.not(indexed: true, type: ["Preamble", "Container"]).order("ident ASC").limit(1).last
   
   while section
@@ -64,25 +66,31 @@ task :index_queue => :environment do
       index_name = "lords_hansard"
     end
     
-    #p section.safe_component.daily_part
     p section.hansard_ref
     
-    text = section.paragraphs.map { |x| x.content }    
-    doc = {id: section.ident, title: section.title, text: text, url: section.url}
+    text = section.paragraphs.map { |x| x.content }
+    doc = {
+        id: section.ident,
+        title: section.title,
+        text: text,
+        date: section.safe_component.daily_part.date,
+        url: section.url,
+        hansard_ref: section.hansard_ref,
+        hansard_component: section.safe_component.name,
+        members: section.members,
+        number: section.number,
+        question_type: section.question_type
+      }
     
     indexer.add_doc(index_name, section.type.downcase, doc)
     
     # ToDo - if the :delete_indexed_text is set, clear the unneccesary fields
     
-    ## Disabled during initial test/debug
     # update the flag
-    # section.indexed = true
-    # section.save
+    section.indexed = true
+    section.save
     #
     # get the next one
-    #section = Section.where.not(indexed: true, type: ["Preamble", "Container"]).order("ident ASC").limit(1).last
-    
-    # shouldn't be here, just closing the loop after a single fetch
-    section = nil
+    section = Section.where.not(indexed: true, type: ["Preamble", "Container"]).order("ident ASC").limit(1).last
   end
 end

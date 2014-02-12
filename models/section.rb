@@ -12,8 +12,9 @@ class Section < ActiveRecord::Base
     sec = self
     while !sec.component
       sec = sec.parent_section
+      break unless sec
     end
-    sec.component
+    sec.component if sec
   end
   
   def house
@@ -24,12 +25,13 @@ class Section < ActiveRecord::Base
     house_letter = house[0]
     ref_date = safe_component.daily_part.date.strftime("%e %B %Y")
     vol = safe_component.daily_part.volume
+    part = safe_component.daily_part.part
     if columns.length > 1 and columns.first < columns.last
       col = "cc #{columns.first} to #{columns.last}"
     else
       col = "c#{columns.first}"
     end
-    %Q|H#{house_letter} Deb vol #{vol} #{col}|.squeeze(" ")
+    %Q|H#{house_letter} Deb vol #{vol} #{col} (Part #{part})|.squeeze(" ")
   end
 end
 
