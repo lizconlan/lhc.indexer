@@ -26,26 +26,14 @@ module LHC
                               settings: {
                                 index: {
                                   number_of_shards: 1,
-                                  number_of_replicas: 0
-                                },
-                                analysis: {
-                                  filter: {
-                                    ngram: {
-                                      type: 'nGram',
-                                      min_gram: 3,
-                                      max_gram: 25
-                                    }
-                                  },
-                                  analyzer: {
-                                    ngram: {
-                                      tokenizer: 'whitespace',
-                                      filter: ['lowercase', 'stop', 'ngram'],
-                                      type: 'custom'
-                                    },
-                                    ngram_search: {
-                                      tokenizer: 'whitespace',
-                                      filter: ['lowercase', 'stop'],
-                                      type: 'custom'
+                                  number_of_replicas: 0,
+                                  analysis: {
+                                    analyzer: {
+                                      default: {
+                                        type: "custom",
+                                        tokenizer: "standard",
+                                        filter: ["standard", "asciifolding", "lowercase"]
+                                      }
                                     }
                                   }
                                 }
