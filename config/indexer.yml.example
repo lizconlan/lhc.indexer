@@ -1,2 +1,3 @@
 :delete_indexed_text: false
 :elasticsearch_url: http://localhost:9200
+:stopwords: ["and", "the", "or", "on"]

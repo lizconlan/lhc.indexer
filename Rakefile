@@ -22,11 +22,11 @@ task :create_indexes do
   host = ENV['host']
   port = ENV['port']
   
-  unless host
-    raise "must specify the elasticsearch host e.g. rake create_indexes host=localhost"
+  if host and port
+    indexer = LHC::Indexer.new(host, port)
+  else
+    indexer = LHC::Indexer.new
   end
-  
-  indexer = LHC::Indexer.new(host, port)
   
   Mappings.index_names.each do |index_name|
     begin
@@ -45,17 +45,17 @@ end
 
 desc "index all the things"
 task :index_queue => :environment do
-  host = ENV['host']
-  port = ENV['port']
-  
-  unless host
-    raise "must specify the elasticsearch host e.g. rake create_indexes host=localhost"
-  end
-  
   #ensure the indexes are created properly
   Rake::Task["create_indexes"].execute
   
-  indexer = LHC::Indexer.new(host, port)
+  host = ENV['host']
+  port = ENV['port']
+  
+  if host and port
+    indexer = LHC::Indexer.new(host, port)
+  else
+    indexer = LHC::Indexer.new
+  end
   section = Section.where.not(indexed: true, type: ["Preamble", "Container"]).order("ident ASC").limit(1).last
   
   while section

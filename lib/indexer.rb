@@ -6,12 +6,18 @@ module LHC
     
     require "./lib/mappings.rb"
     
-    def initialize(server, port = nil)
-      if port
+    def initialize(*args)
+      @settings = YAML::parse(File.read("./config/indexer.yml")).to_ruby
+      server = args[0]
+      port = args[1]
+      if port and server
         @client = Elasticsearch::Client.new host: server, port: port
-      else
+      elsif server
         @client = Elasticsearch::Client.new host: server
+      else
+        @client = Elasticsearch::Client.new host: @settings[:server], port: @settings[:port]
       end
+      
     end
     
     def add_doc(index_name, type, doc)
@@ -32,7 +38,8 @@ module LHC
                                       default: {
                                         type: "custom",
                                         tokenizer: "standard",
-                                        filter: ["standard", "asciifolding", "lowercase"]
+                                        filter: ["standard", "asciifolding", "lowercase", "stop"],
+                                        stopwords: @settings[:stopwords]
                                       }
                                     }
                                   }
