@@ -8,24 +8,15 @@ class Section < ActiveRecord::Base
   has_many :sections, :foreign_key => 'parent_section_id', :dependent => :destroy
   belongs_to :parent_section, :class_name => "Section", :foreign_key => 'parent_section_id'
   
-  def safe_component
-    sec = self
-    while !sec.component
-      sec = sec.parent_section
-      break unless sec
-    end
-    sec.component if sec
-  end
-  
   def house
-    safe_component.daily_part.house
+    component.daily_part.house
   end
   
   def hansard_ref
     house_letter = house[0]
-    ref_date = safe_component.daily_part.date.strftime("%e %B %Y")
-    vol = safe_component.daily_part.volume
-    part = safe_component.daily_part.part
+    ref_date = component.daily_part.date.strftime("%e %B %Y")
+    vol = component.daily_part.volume
+    part = component.daily_part.part
     if columns.length > 1 and columns.first < columns.last
       col = "cc #{columns.first} to #{columns.last}"
     else

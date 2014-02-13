@@ -73,10 +73,10 @@ task :index_queue => :environment do
         id: section.ident,
         title: section.title,
         text: text,
-        date: section.safe_component.daily_part.date,
+        date: section.component.daily_part.date,
         url: section.url,
         hansard_ref: section.hansard_ref,
-        hansard_component: section.safe_component.name,
+        hansard_component: section.component.name,
         members: section.members,
         number: section.number,
         question_type: section.question_type
