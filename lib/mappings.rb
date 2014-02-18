@@ -5,8 +5,8 @@ class Mappings
   
   def self.all_mappings
     {
-      commons_hansard:
-        {contents: {
+      commons_hansard:{
+        contents: {
           debate: {
             properties: {
               title: { type: "string", index: "analyzed" },
@@ -19,7 +19,7 @@ class Mappings
               members: { type: "string", index: "not_analyzed" },
               chair: { type: "string", index: "analyzed" },
               url: { type: "string", index: "not_analyzed" }
-            }
+            },
           },
           question: {
             properties: {

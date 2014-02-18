@@ -24,4 +24,4 @@ and the Search Front End are going to go into their own repos.
 
 * Ruby 2.0.x
 * Postgres 9.3.x
-* Elasticsearch 0.90
+* Elasticsearch 1.0.x
