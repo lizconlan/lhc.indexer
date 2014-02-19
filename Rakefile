@@ -78,6 +78,7 @@ task :index_queue => :environment do
         hansard_ref: section.hansard_ref,
         hansard_component: section.component.name,
         members: section.members,
+        chair: section.chair,
         number: section.number,
         question_type: section.question_type
       }
