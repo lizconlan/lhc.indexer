@@ -42,11 +42,12 @@ task :create_indexes do
   end
 end
 
-
 desc "index all the things"
 task :index_queue => :environment do
   #ensure the indexes are created properly
   Rake::Task["create_indexes"].execute
+  
+  require "action_view/helpers/sanitize_helper"
   
   host = ENV['host']
   port = ENV['port']
@@ -68,7 +69,9 @@ task :index_queue => :environment do
     
     p section.hansard_ref
     
-    text = section.paragraphs.map { |x| x.content }
+    sanitizer = HTML::FullSanitizer.new
+    
+    text = section.paragraphs.map { |x| sanitizer.sanitize(x.content) }
     doc = {
         id: section.ident,
         title: section.title,
