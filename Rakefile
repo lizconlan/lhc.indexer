@@ -86,7 +86,7 @@ task :index_queue => :environment do
         question_type: section.question_type
       }
     
-    indexer.add_doc(index_name, section.type.downcase, doc)
+    indexer.add_doc(index_name, doc)
     
     # ToDo - if the :delete_indexed_text is set, clear the unneccesary fields
     

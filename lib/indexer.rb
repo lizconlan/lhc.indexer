@@ -20,9 +20,9 @@ module LHC
       
     end
     
-    def add_doc(index_name, type, doc)
+    def add_doc(index_name, doc)
       # example doc - { title: "Test1", text: "Hello World!"}
-      @client.create index: index_name, type: type, body: doc
+      @client.create index: index_name, type: "section", body: doc
     end
     
     def create_index(name)
