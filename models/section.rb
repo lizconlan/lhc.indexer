@@ -18,11 +18,37 @@ class Section < ActiveRecord::Base
     vol = component.daily_part.volume
     part = component.daily_part.part
     if columns.length > 1 and columns.first < columns.last
-      col = "cc #{columns.first} to #{columns.last}"
+      significant_digits = column_significant_digits(columns.first.to_i, columns.last.to_i)
+      if columns.first =~ /\d+(.*)$/
+        suffix = $1
+      else
+        suffix = ""
+      end
+      col = "cc#{columns.first.gsub(suffix, '')}-#{significant_digits}#{suffix}"
     else
       col = "c#{columns.first}"
     end
-    %Q|H#{house_letter} Deb vol #{vol} #{col} (Part #{part})|.squeeze(" ")
+    %Q|H#{house_letter} Deb #{component.date.strftime("%e %b %Y")} vol #{vol} #{col}|.squeeze(" ")
+  end
+  
+  
+  private
+  
+  def column_significant_digits(start_number, end_number)
+    start_text = start_number.to_s
+    end_text = end_number.to_s
+    if end_text.size > start_text.size
+      significant_digits = end_text
+    else
+      start_part = start_text
+      end_part = end_text
+      while start_part && end_part && start_part[0] == end_part[0]
+        start_part = start_part[1, (start_part.size - 1)]
+        end_part = end_part[1, (end_part.size - 1)]
+      end
+      significant_digits = end_part
+    end
+    significant_digits
   end
 end
 
