@@ -61,6 +61,12 @@ end
 class Statement < Section
 end
 
+class Petition < Section
+end
+
+class PetitionObservation < Section
+end
+
 class Question < Section
 end
 
