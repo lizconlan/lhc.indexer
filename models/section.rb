@@ -67,6 +67,9 @@ end
 class PetitionObservation < Section
 end
 
+class MinisterialCorrection < Section
+end
+
 class Question < Section
 end
 
