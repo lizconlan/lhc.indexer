@@ -72,24 +72,32 @@ task :index_queue => :environment do
     sanitizer = HTML::FullSanitizer.new
     
     text = section.paragraphs.map { |x| sanitizer.sanitize(x.content) }
-    doc = {
-        id: section.ident,
-        title: section.title,
-        text: text,
-        date: section.component.daily_part.date,
-        url: section.url,
-        hansard_ref: section.hansard_ref,
-        hansard_component: section.component.name,
-        members: section.members,
-        chair: section.chair,
-        number: section.number,
-        question_type: section.question_type
-      }
     
-    indexer.add_doc(index_name, doc)
-    
+    unless text.empty?
+      text = text.join(" ")
+      
+      if section.type == "AmendmentGroup"
+        more_text = section.sections.map { |x| x.title }
+        text = "#{more_text.join(" ")} #{text}"
+      end
+      
+      doc = {
+          id: section.ident,
+          title: section.title,
+          text: text,
+          date: section.component.daily_part.date,
+          url: section.url,
+          hansard_ref: section.hansard_ref,
+          hansard_component: section.component.name,
+          members: section.members,
+          chair: section.chair,
+          number: section.number,
+          question_type: section.question_type
+        }
+      
+      indexer.add_doc(index_name, doc)
+    end
     # ToDo - if the :delete_indexed_text is set, clear the unneccesary fields
-    
     # update the flag
     section.indexed = true
     section.save
