@@ -13,7 +13,7 @@ class Section < ActiveRecord::Base
   end
   
   def hansard_ref
-    house_letter = house[0]
+    house_letter = house[0].upcase()
     ref_date = component.daily_part.date.strftime("%e %B %Y")
     vol = component.daily_part.volume
     part = component.daily_part.part
@@ -83,4 +83,10 @@ class Tribute < Section
 end
 
 class Division < Section
+end
+
+class AmendmentGroup < Section
+end
+
+class QuestionGroup < Section
 end
