@@ -20,9 +20,20 @@ module LHC
       
     end
     
-    def add_doc(index_name, doc)
+    def add_doc(index_name, ident, doc)
+      begin
+        found_doc = @client.get index: index_name, id: ident
+        @client.delete index: index_name, type: found_doc["_type"], id: ident
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound
+        #no existing document, all is well, carry on
+      end
+      
       # example doc - { title: "Test1", text: "Hello World!"}
-      @client.create index: index_name, type: "section", body: doc
+      @client.create index: index_name, id: ident, type: "section", body: doc
+    end
+    
+    def get_doc(index_name, ident)
+      @client.get index: index_name, id: ident
     end
     
     def create_index(name)
